@@ -15,6 +15,19 @@ function getCurrentWeather(searchValue) {
     })
     .then(function(response) {
         console.log(response)
+        getForecast(response.coord.lat, response.coord.lon)
     })
 
+}
+
+
+function getForecast(lat,lon) {
+    var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon="+ lon + "&exclude={part}&appid=d91f911bcf2c0f925fb6535547a5ddc9"
+
+    fetch(apiUrl).then(function(response) {
+        return response.json()
+    })
+    .then(function(response) {
+        console.log(response)
+    })
 }
