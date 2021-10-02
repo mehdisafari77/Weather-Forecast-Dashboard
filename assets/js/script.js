@@ -1,29 +1,12 @@
 
 moment().format("L")
 
-$("#search-button").on("click", function(event) {
-    event.preventDefault();
-    var searchValue = $("#search-value").val().trim()
-
-    var textContent = $(this).siblings("input").val();
-    var arraySpot = [];
-    arraySpot.push(textContent);
-    localStorage.setItem('cityName', JSON.stringify(arraySpot));
-  
-    getCurrentCityWeather(searchValue);
-    // pageLoad();
-
-    console.log(searchValue)
-})
-
-
 function getCurrentCityWeather(searchValue) {
 
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
 
 
     fetch(apiUrl).then(function(response) {
-  
         return response.json()
     })
     .then(function(response) {
@@ -62,14 +45,13 @@ function getCurrentCityWeather(searchValue) {
 
         var appendDiv = $("div");
         appendDiv.append(todayDateDisplay, temp, humidity, wind, weather)
-        getForecast(response.coord.lat, response.coord.lon)
         $("#current").html(appendDiv);
     })
 
 }
 
 
-function getForecast() {
+function getFiveDayForecast() {
     var lat = response.coord.lat;
     var lon = response.coord.lon;
     var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon="+ lon + "&exclude={part}&appid=d91f911bcf2c0f925fb6535547a5ddc9&units=imperial"
@@ -148,5 +130,31 @@ function getUV() {
     });
 }
 
+function renderPage() {
+    var finalSearch = JSON.parse(localStorage.getItem("cityName"));
+    var searchedCityDiv = $("<button class='btn border text-muted mt-1 shadow-sm bg-white rounded' style='width: 12rem;'>").text(finalSearch);
+    var search = $("<div>");
+    search.append(searchedCityDiv)
+    $("#search-history").prepend(search)
+}
 
+$("#search-button").on("click", function(event) {
+    event.preventDefault();
+    var searchValue = $("#search-value").val().trim()
 
+    var textContent = $(this).siblings("input").val();
+    var arraySpot = [];
+    arraySpot.push(textContent);
+    localStorage.setItem('cityName', JSON.stringify(arraySpot));
+  
+    getCurrentCityWeather(searchValue);
+    renderPage();
+
+    console.log(searchValue)
+})
+
+$("#search-history").on("click", ".btn", function(event) {
+    event.preventDefault();
+    console.log($(this).text())
+    getForecast($(this).text())
+})
