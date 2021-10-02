@@ -1,6 +1,6 @@
 
 moment().format("L")
-
+var searchValue = $("#search-value").val().trim()
 function getCurrentCityWeather(searchValue) {
 
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
@@ -10,16 +10,16 @@ function getCurrentCityWeather(searchValue) {
         return response.json()
     })
     .then(function(response) {
-
+        console.log(apiUrl)
         console.log(response)
         $("current").empty()
         var todayDate = moment().format("L")
 
         var cityName = $("<h2>").text(response.name);
         var todayDateDisplay = cityName.append(" " + todayDate);
-        var temp = $("<h3>").text("Temperature: " + response.main.temp);
-        var humidity = $("<h3>").text("Humidity: " + response.main.humidity);
-        var wind = $("<h3>").text("wind Speed: " + response.wind.speed);
+        var temp = $("<p>").text("Temperature: " + response.main.temp);
+        var humidity = $("<p>").text("Humidity: " + response.main.humidity);
+        var wind = $("<p>").text("wind Speed: " + response.wind.speed);
         var weather = response.weather[0].main;
         
         // Conditionals for weather icons
@@ -43,21 +43,23 @@ function getCurrentCityWeather(searchValue) {
         }
         console.log(todayDateDisplay, temp, humidity, wind, weather)
 
-        var appendDiv = $("div");
+
+        var appendDiv = $("<div>");
         appendDiv.append(todayDateDisplay, temp, humidity, wind, weather)
         $("#current").html(appendDiv);
+
     })
+    getFiveDayForecast()
+    getUV()
 
 }
 
 
-function getFiveDayForecast() {
-    var lat = response.coord.lat;
-    var lon = response.coord.lon;
-    var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon="+ lon + "&exclude={part}&appid=d91f911bcf2c0f925fb6535547a5ddc9&units=imperial"
+function getFiveDayForecast(searchValue) {
+
+    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
 
     fetch(apiUrl).then(function(response) {
-
         console.log(response)
         return response.json()
         
@@ -100,7 +102,6 @@ function getFiveDayForecast() {
                 weatherIcon.attr("style", "height: 40px; width: 40px");
             }
 
-            //append items to.......
             fiveDayDiv.append(h5date);
             fiveDayDiv.append(weatherIcon);
             fiveDayDiv.append(pTemp);
@@ -112,7 +113,9 @@ function getFiveDayForecast() {
 }
 
 
-function getUV() {
+function getUV(response) {
+    var lat = response.coord.lat;
+    var lon = response.coord.lon;   
     var apiUrl = "https://api.openweathermap.org/data/2.5/uvi?&appid=d91f911bcf2c0f925fb6535547a5ddc9&lat=" + lat  + "&lon=" + lon;
 
     fetch(apiUrl).then(function(response) {
@@ -120,12 +123,12 @@ function getUV() {
         return response.json()
     })
     .then(function (response) {
-    $('#uvl-display').empty();
+    $("#uvi-display").empty();
     var uvResults = response.value;
 
-    var uv = $("<button class='btn bg-success'>").text("UV Index: " + uvResults);
-    $('#uvl-display').html(uv);
-    console.log(uv)
+    var uvIndex = $("<button class='btn bg-success'>").text("UV Index: " + uvResults);
+    $("#uvi-display").html(uvIndex);
+    console.log(uvIndex)
 
     });
 }
@@ -156,5 +159,6 @@ $("#search-button").on("click", function(event) {
 $("#search-history").on("click", ".btn", function(event) {
     event.preventDefault();
     console.log($(this).text())
-    getForecast($(this).text())
+    getCurrentCityWeather()
+
 })
