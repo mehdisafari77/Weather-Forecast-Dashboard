@@ -1,11 +1,19 @@
 
 moment().format("L")
 
-$("#search-button").on("click", function() {
-    var searchValue = $("#search-value").val()
+$("#search-button").on("click", function(event) {
+    event.preventDefault();
+    var searchValue = $("#search-value").val().trim()
+
+    var textContent = $(this).siblings("input").val();
+    var arraySpot = [];
+    arraySpot.push(textContent);
+    localStorage.setItem('cityName', JSON.stringify(arraySpot));
+  
+    getCurrentCityWeather(searchValue);
+    // pageLoad();
 
     console.log(searchValue)
-    getCurrentCityWeather(searchValue)
 })
 
 
@@ -47,7 +55,7 @@ function getCurrentCityWeather(searchValue) {
             var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/13d.png");
             weatherIcon.attr("style", "height: 60px; width: 60px");
         }
-        comsole.log(todayDateDisplay, temp, humidity, wind, weather)
+        console.log(todayDateDisplay, temp, humidity, wind, weather)
 
         var appendDiv = $("div");
         appendDiv.append(todayDateDisplay, temp, humidity, wind, weather)
@@ -66,19 +74,19 @@ function getForecast(lat,lon) {
     })
     .then(function(response) {
         $("#fiveday").empty();
-        for (var i = 0; i < results.length; i += 8) {
+        for (var i = 0; i < response.daily.length; i - 3) {
             var fiveDayDiv = $("<div class='card shadow-lg text-white bg-primary mx-auto mb-10 p-2' style='width: 8.5rem; height: 11rem;'>");
             
-            var date = results[i].dt_txt;
+            var date = response[i].dt_txt;
             var setDate = date.substr(0,10)
-            var temperature = results[i].main.temp;
-            var humidity = results[i].main.humidity;
+            var temperature = response[i].main.temp;
+            var humidity = response[i].main.humidity;
    
             var h5date = $("<h5 class='card-title'>").text(setDate);
             var pTemp = $("<p class='card-text'>").text("Temp: " + temperature);
             var pHum = $("<p class='card-text'>").text("Humidity " + humidity);
 
-            var weather = results[i].weather[0].main
+            var weather = response[i].weather[0].main
 
             if (weather === "Rain") {
                 var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/09d.png");
