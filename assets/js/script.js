@@ -18,13 +18,16 @@ $("#search-button").on("click", function(event) {
 
 
 function getCurrentCityWeather(searchValue) {
+
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
 
 
     fetch(apiUrl).then(function(response) {
+  
         return response.json()
     })
     .then(function(response) {
+
         console.log(response)
         $("current").empty()
         var todayDate = moment().format("L")
@@ -66,27 +69,34 @@ function getCurrentCityWeather(searchValue) {
 }
 
 
-function getForecast(lat,lon) {
+function getForecast() {
+    var lat = response.coord.lat;
+    var lon = response.coord.lon;
     var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon="+ lon + "&exclude={part}&appid=d91f911bcf2c0f925fb6535547a5ddc9&units=imperial"
 
     fetch(apiUrl).then(function(response) {
+
+        console.log(response)
         return response.json()
+        
     })
     .then(function(response) {
+
+        var results = response.list;
         $("#fiveday").empty();
-        for (var i = 0; i < response.daily.length; i - 3) {
+        for (var i = 0; i < results.length; i += 8) {
             var fiveDayDiv = $("<div class='card shadow-lg text-white bg-primary mx-auto mb-10 p-2' style='width: 8.5rem; height: 11rem;'>");
             
-            var date = response[i].dt_txt;
+            var date = results[i].dt_txt;
             var setDate = date.substr(0,10)
-            var temperature = response[i].main.temp;
-            var humidity = response[i].main.humidity;
+            var temperature = results[i].main.temp;
+            var humidity = results[i].main.humidity;
    
             var h5date = $("<h5 class='card-title'>").text(setDate);
             var pTemp = $("<p class='card-text'>").text("Temp: " + temperature);
             var pHum = $("<p class='card-text'>").text("Humidity " + humidity);
 
-            var weather = response[i].weather[0].main
+            var weather = results[i].weather[0].main
 
             if (weather === "Rain") {
                 var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/09d.png");
@@ -116,15 +126,15 @@ function getForecast(lat,lon) {
             $("#fiveday").append(fiveDayDiv);
 
         }
-
     })
 }
 
 
-function getUV(lat,lon) {
+function getUV() {
     var apiUrl = "https://api.openweathermap.org/data/2.5/uvi?&appid=d91f911bcf2c0f925fb6535547a5ddc9&lat=" + lat  + "&lon=" + lon;
 
     fetch(apiUrl).then(function(response) {
+        console.log(response)
         return response.json()
     })
     .then(function (response) {
