@@ -3,11 +3,10 @@ moment().format("L")
 
 
 function searchForCity(cityname) {
-    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
-    var apiUrlForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityname + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
-
+    var lat;
+    var lon;  
     getCurrentCityWeather(cityname)
-    getUV(cityname)
+    getUV(lat, lon)
     getFiveDayForecast(cityname)
 }
 renderPage();
@@ -152,9 +151,9 @@ function getFiveDayForecast(searchValue) {
 function getUV(lat, lon) {
     var lat;
     var lon;  
-    var apiUrl = "https://api.openweathermap.org/data/2.5/uvi?&appid=d91f911bcf2c0f925fb6535547a5ddc9&lat=" + lat  + "&lon=" + lon;
+    var apiUrlUvi = "https://api.openweathermap.org/data/2.5/uvi?&appid=d91f911bcf2c0f925fb6535547a5ddc9&lat=" + lat  + "&lon=" + lon;
 
-    fetch(apiUrl).then(function(response) {
+    fetch(apiUrlUvi).then(function(response) {
         console.log(response)
         return response.json()
     })
@@ -162,7 +161,7 @@ function getUV(lat, lon) {
     $("#uvi-display").empty();
     var uvResults = response.value;
 
-    var uvIndex = $("<button class='btn bg-success'>").text("UV Index: " + uvResults);
+    var uvIndex = $("<button class='btn bg-success'>").text("UV Index: " + response.value);
     $("#uvi-display").html(uvIndex);
     console.log(uvIndex)
 
