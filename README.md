@@ -6,7 +6,7 @@ A weather forecasting website
 
 ## Deployed Link
 
-* [See Live Site]()
+* [See Live Site](https://mehdisafari77.github.io/Weather-Forecast-Dashboard/)
 
 ## Technologies Used
 - HTML - used to create elements on the DOM
