@@ -1,3 +1,7 @@
+// API URLs + API Key
+var myApiKey = "64737e03870697d8c877d52085926dff"
+var weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?q="
+var weatherForecasrApiUrl = 
 
 // Time format
 moment().format("L")
@@ -46,8 +50,7 @@ $("#search-history").on("click", ".btn", function (event) {
 // First function to get weather and time of searched city
 function getCurrentCityWeather(searchValue) {
 
-    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
-
+    var apiUrl = weatherApiUrl + searchValue + "&units=imperial&appid=" + myApiKey;
 
     fetch(apiUrl).then(function (response) {
         return response.json()
@@ -94,16 +97,17 @@ function getCurrentCityWeather(searchValue) {
 
 // Get UVI Index function
 function getUV(lon, lat) {
-    var lat;
-    var lon;
-    var apiUrlUvi = "https://api.openweathermap.org/data/2.5/uvi?&appid=d91f911bcf2c0f925fb6535547a5ddc9&lat=" + lat + "&lon=" + lon;
+    var lat = searchValue.coord.lat;
+    var lon = searchValue.coord.lon;
+    var apiUrlUvi = "https://api.openweathermap.org/data/2.5/uvi?&lat=" + lat + "&lon=" + + lon + "&appid=" + myApiKey;
+
 
     fetch(apiUrlUvi).then(function (response) {
         lon = response.coord.lon
         lat = response.coord.lat
         console.log(apiUrlUvi)
-        console.log(response)
-        return response.json()
+        console.log(data)
+        return response.json(response)
     })
         .then(function (response) {
             lon = response.coord.lon
@@ -113,6 +117,8 @@ function getUV(lon, lat) {
 
             var uvIndexButton = $("<button class='btn bg-success'>").text("UV Index: " + uvResults);
             $("#uvi-display").html(uvIndexButton);
+
+            uvIndexButton.append(appendDiv)
 
         });
 }
