@@ -1,6 +1,47 @@
 
 moment().format("L")
-var searchValue = $("#search-value").val().trim()
+
+
+function searchForCity(cityname) {
+    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
+    var apiUrlForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityname + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
+
+    getCurrentCityWeather(cityname)
+    getUV(cityname)
+    getFiveDayForecast(cityname)
+}
+renderPage();
+
+function renderPage() {
+    var finalSearch = JSON.parse(localStorage.getItem("cityName"));
+    var searchedCityDiv = $("<button class='btn border text-muted mt-1 shadow-sm bg-white rounded' style='width: 12rem;'>").text(finalSearch);
+    var search = $("<div>");
+    search.append(searchedCityDiv)
+    $("#search-history").prepend(search)
+}
+
+$("#search-button").on("click", function(event) {
+    event.preventDefault();
+    var searchValue = $("#search-value").val().trim()
+
+    var textContent = $(this).siblings("input").val();
+    var arraySpot = [];
+    arraySpot.push(textContent);
+    localStorage.setItem('cityName', JSON.stringify(arraySpot));
+  
+    searchForCity(searchValue);
+    renderPage()
+
+    console.log(searchValue)
+})
+
+$("#search-history").on("click", ".btn", function(event) {
+    event.preventDefault();
+    console.log($(this).text())
+    searchForCity($(this).text())
+
+})
+
 function getCurrentCityWeather(searchValue) {
 
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
@@ -15,8 +56,8 @@ function getCurrentCityWeather(searchValue) {
         $("current").empty()
         var todayDate = moment().format("L")
 
-        var cityName = $("<h2>").text(response.name);
-        var todayDateDisplay = cityName.append(" " + todayDate);
+        var cityNameEL = $("<h2>").text(response.name);
+        var todayDateDisplay = cityNameEL.append(" " + todayDate);
         var temp = $("<p>").text("Temperature: " + response.main.temp);
         var humidity = $("<p>").text("Humidity: " + response.main.humidity);
         var wind = $("<p>").text("wind Speed: " + response.wind.speed);
@@ -25,7 +66,7 @@ function getCurrentCityWeather(searchValue) {
         // Conditionals for weather icons
         if (weather === "Rain") {
             var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/09d.png");
-            weatherIcon.attr("style", "height: 60px; width: 60px");
+            weatherIcon.attr("style", "height:l60px; width: 60px");
         } else if (weather=== "Clouds") {
             var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/03d.png");
             weatherIcon.attr("style", "height: 60px; width: 60px");
@@ -43,29 +84,23 @@ function getCurrentCityWeather(searchValue) {
         }
         console.log(todayDateDisplay, temp, humidity, wind, weather)
 
-
         var appendDiv = $("<div>");
         appendDiv.append(todayDateDisplay, temp, humidity, wind, weather)
-        $("#current").html(appendDiv);
-
+        $("#current").html(appendDiv);  
     })
-    getFiveDayForecast()
-    getUV()
-
 }
-
 
 function getFiveDayForecast(searchValue) {
 
-    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
+    var apiUrlForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
 
-    fetch(apiUrl).then(function(response) {
+    fetch(apiUrlForecast).then(function(response) {
+        console.log(apiUrlForecast)
         console.log(response)
-        return response.json()
-        
+        return response.json() 
     })
     .then(function(response) {
-
+        console.log(response)
         var results = response.list;
         $("#fiveday").empty();
         for (var i = 0; i < results.length; i += 8) {
@@ -108,14 +143,15 @@ function getFiveDayForecast(searchValue) {
             fiveDayDiv.append(pHum);
             $("#fiveday").append(fiveDayDiv);
 
+            console.log(h5date, pTemp, pHum)
+
         }
     })
 }
 
-
-function getUV(response) {
-    var lat = response.coord.lat;
-    var lon = response.coord.lon;   
+function getUV(lat, lon) {
+    var lat;
+    var lon;  
     var apiUrl = "https://api.openweathermap.org/data/2.5/uvi?&appid=d91f911bcf2c0f925fb6535547a5ddc9&lat=" + lat  + "&lon=" + lon;
 
     fetch(apiUrl).then(function(response) {
@@ -133,32 +169,4 @@ function getUV(response) {
     });
 }
 
-function renderPage() {
-    var finalSearch = JSON.parse(localStorage.getItem("cityName"));
-    var searchedCityDiv = $("<button class='btn border text-muted mt-1 shadow-sm bg-white rounded' style='width: 12rem;'>").text(finalSearch);
-    var search = $("<div>");
-    search.append(searchedCityDiv)
-    $("#search-history").prepend(search)
-}
 
-$("#search-button").on("click", function(event) {
-    event.preventDefault();
-    var searchValue = $("#search-value").val().trim()
-
-    var textContent = $(this).siblings("input").val();
-    var arraySpot = [];
-    arraySpot.push(textContent);
-    localStorage.setItem('cityName', JSON.stringify(arraySpot));
-  
-    getCurrentCityWeather(searchValue);
-    renderPage();
-
-    console.log(searchValue)
-})
-
-$("#search-history").on("click", ".btn", function(event) {
-    event.preventDefault();
-    console.log($(this).text())
-    getCurrentCityWeather()
-
-})
