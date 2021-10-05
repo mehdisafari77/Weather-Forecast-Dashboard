@@ -5,10 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <title>Weather Dashbaord</title>
 </head>
@@ -17,15 +15,16 @@
     <div class="container-fluid text-center text-white bg-dark p-2">
         <h1>Weather Dashboard</h1>
     </div>
-    <div class="container">
+    <div class="container-fluid custom-nav">
         <div class="clearfix">
             <div class="col-4 float-left">
                 <nav class="navbar navbar-light bg-light shadow-lg p-3 mb-5 bg-white rounded">
                     <h5 class="mt-1">Search for a City:</h5>
                     <form class="form-inline">
                         <input id="search-value" class="form-control mr-sm-2" type="search" placeholder="Search" />
-                        <button id="search-button" class="btn btn-primary my-2 my-sm-0" type="submit">
-                            <i class="fa fa-search"></i>
+                        <button id="search-button" class="btn btn-primary my-2 my-sm-0" type="submit">   
+                        </button>
+                        <i class="fa fa-search"></i>
                         </button>
                     </form>
                     <form class="mt-1" id="search-history">
@@ -34,19 +33,18 @@
             </div>
 
             <div class="col-8 float-right">
-                <div class="card bg-light text-dark p-2 rem shadow-lg p-3 mb-3 bg-white rounded"
-                    style="width: 710; height: 19rem;">
+                <div class="card bg-light text-dark p-2 rem shadow-lg p-3 mb-3 bg-white rounded" style="width: 710; height: 19rem;">
                     <div id="current"></div>
 
                     <div id="uvi-display"></div>
                 </div>
                 <br>
-                <h2>5-Day Forcast:</h2>
+                <h2 class="forecast">5-Day Forcast:</h2>
                 <div id="fiveday" class="row"></div>
             </div>
         </div>
     </div>
-</div>
+    </div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

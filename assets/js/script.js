@@ -23,7 +23,7 @@ function renderPage() {
 }
 
 // Search icon button functionality
-$("#search-button").on("click", function (event) {
+$("#search-button").on("click", function(event) {
     event.preventDefault();
     var searchValue = $("#search-value").val().trim()
 
@@ -39,7 +39,7 @@ $("#search-button").on("click", function (event) {
 })
 
 // Access weather from saved cities in the history
-$("#search-history").on("click", ".btn", function (event) {
+$("#search-history").on("click", ".btn", function(event) {
     event.preventDefault();
     console.log($(this).text())
     searchForCity($(this).text())
@@ -51,10 +51,10 @@ function getCurrentCityWeather(searchValue) {
 
     var apiUrl = weatherApiUrl + searchValue + "&units=imperial&appid=" + myApiKey;
 
-    fetch(apiUrl).then(function (response) {
-        return response.json()
-    })
-        .then(function (response) {
+    fetch(apiUrl).then(function(response) {
+            return response.json()
+        })
+        .then(function(response) {
             console.log(apiUrl)
             console.log(response)
             $("current").empty()
@@ -77,12 +77,10 @@ function getCurrentCityWeather(searchValue) {
             } else if (weather === "Clear") {
                 var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/01d.png");
                 weatherIcon.attr("style", "height: 60px; width: 60px");
-            }
-            else if (weather === "Drizzle") {
+            } else if (weather === "Drizzle") {
                 var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/10d.png");
                 weatherIcon.attr("style", "height: 60px; width: 60px");
-            }
-            else if (weather === "Snow") {
+            } else if (weather === "Snow") {
                 var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/13d.png");
                 weatherIcon.attr("style", "height: 60px; width: 60px");
             }
@@ -91,7 +89,7 @@ function getCurrentCityWeather(searchValue) {
             var appendDiv = $("<div>");
             appendDiv.append(todayDateDisplay, weatherIcon, temp, humidity, wind)
             $("#current").html(appendDiv);
-            
+
             var lat = response.coord.lat;
             var lon = response.coord.lon;
             getUV(lat, lon)
@@ -100,18 +98,17 @@ function getCurrentCityWeather(searchValue) {
 
 // Get UVI Index function
 function getUV(lat, lon) {
-    var apiUrlUvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + myApiKey;
+    var apiUrlUvi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,minutely,alerts&appid=" + myApiKey + "&units=imperial"
 
 
-    fetch(apiUrlUvi).then(function (response) {
-        console.log(apiUrlUvi)
-        console.log(response
-            )
-        return response.json(response)
-    })
-        .then(function (response) {
+    fetch(apiUrlUvi).then(function(response) {
+            console.log(apiUrlUvi)
+            console.log(response)
+            return response.json(response)
+        })
+        .then(function(response) {
             $("#uvi-display").empty();
-            var uvResults = response.value;
+            var uvResults = response.current.uvi;
 
             var uvIndexButton = $("<button class='btn bg-success'>").text("UV Index: " + uvResults);
             $("#uvi-display").html(uvIndexButton);
@@ -125,12 +122,12 @@ function getFiveDayForecast(searchValue) {
 
     var apiUrlForecast = weatherForecasrApiUrl + searchValue + "&units=imperial&" + "appid=" + myApiKey;
 
-    fetch(apiUrlForecast).then(function (response) {
-        console.log(apiUrlForecast)
-        console.log(response)
-        return response.json()
-    })
-        .then(function (response) {
+    fetch(apiUrlForecast).then(function(response) {
+            console.log(apiUrlForecast)
+            console.log(response)
+            return response.json()
+        })
+        .then(function(response) {
             console.log(response)
             var results = response.list;
             $("#fiveday").empty();
@@ -154,16 +151,13 @@ function getFiveDayForecast(searchValue) {
                 } else if (weather === "Clouds") {
                     var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/03d.png");
                     weatherIcon.attr("style", "height: 40px; width: 40px");
-                }
-                else if (weather === "Clear") {
+                } else if (weather === "Clear") {
                     var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/01d.png");
                     weatherIcon.attr("style", "height: 40px; width: 40px");
-                }
-                else if (weather === "Drizzle") {
+                } else if (weather === "Drizzle") {
                     var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/10d.png");
                     weatherIcon.attr("style", "height: 40px; width: 40px");
-                }
-                else if (weather === "Snow") {
+                } else if (weather === "Snow") {
                     var weatherIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/13d.png");
                     weatherIcon.attr("style", "height: 40px; width: 40px");
                 }
@@ -179,7 +173,3 @@ function getFiveDayForecast(searchValue) {
             }
         })
 }
-
-
-
-
