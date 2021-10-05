@@ -1,7 +1,7 @@
 // API URLs + API Key
 var myApiKey = "64737e03870697d8c877d52085926dff"
 var weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?q="
-var weatherForecasrApiUrl = 
+var weatherForecasrApiUrl = "https://api.openweathermap.org/data/2.5/forecast?q="
 
 // Time format
 moment().format("L")
@@ -9,7 +9,6 @@ moment().format("L")
 // Main function
 function searchForCity(cityname) {
     getCurrentCityWeather(cityname)
-    getUV(cityname)
     getFiveDayForecast(cityname)
 }
 renderPage();
@@ -92,33 +91,31 @@ function getCurrentCityWeather(searchValue) {
             var appendDiv = $("<div>");
             appendDiv.append(todayDateDisplay, weatherIcon, temp, humidity, wind)
             $("#current").html(appendDiv);
+            
+            var lat = response.coord.lat;
+            var lon = response.coord.lon;
+            getUV(lat, lon)
         })
 }
 
 // Get UVI Index function
-function getUV(lon, lat) {
-    var lat = searchValue.coord.lat;
-    var lon = searchValue.coord.lon;
-    var apiUrlUvi = "https://api.openweathermap.org/data/2.5/uvi?&lat=" + lat + "&lon=" + + lon + "&appid=" + myApiKey;
+function getUV(lat, lon) {
+    var apiUrlUvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + myApiKey;
 
 
     fetch(apiUrlUvi).then(function (response) {
-        lon = response.coord.lon
-        lat = response.coord.lat
         console.log(apiUrlUvi)
-        console.log(data)
+        console.log(response
+            )
         return response.json(response)
     })
         .then(function (response) {
-            lon = response.coord.lon
-            lat = response.coord.lat
             $("#uvi-display").empty();
             var uvResults = response.value;
 
             var uvIndexButton = $("<button class='btn bg-success'>").text("UV Index: " + uvResults);
             $("#uvi-display").html(uvIndexButton);
-
-            uvIndexButton.append(appendDiv)
+            console.log(response)
 
         });
 }
@@ -126,7 +123,7 @@ function getUV(lon, lat) {
 // Get 5 day forecast function
 function getFiveDayForecast(searchValue) {
 
-    var apiUrlForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&units=imperial&appid=d91f911bcf2c0f925fb6535547a5ddc9"
+    var apiUrlForecast = weatherForecasrApiUrl + searchValue + "&units=imperial&" + "appid=" + myApiKey;
 
     fetch(apiUrlForecast).then(function (response) {
         console.log(apiUrlForecast)
