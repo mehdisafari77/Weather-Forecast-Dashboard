@@ -1,3 +1,4 @@
+
 .custom-nav {
     background-color: rgb(135, 198, 235);
 }
@@ -8,4 +9,12 @@
 
 .magnifier {
     color: #fff;
+}
+
+.custom-header-text{
+    color: #fff;
+}
+
+.custom-nav-head {
+    background-color: rgb(74, 150, 221);
 }
