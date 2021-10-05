@@ -2,7 +2,7 @@
 A weather forecasting website
 
 ## Site Picture
-
+<img width="1390" alt="Screenshot 2021-10-04 at 21 45 19" src="https://user-images.githubusercontent.com/75599021/135961567-d9c0b923-546a-47af-a92c-2a30dd764222.png">
 
 ## Deployed Link
 
