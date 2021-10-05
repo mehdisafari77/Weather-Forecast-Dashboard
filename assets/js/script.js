@@ -3,15 +3,15 @@ var myApiKey = "64737e03870697d8c877d52085926dff"
 var weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?q="
 var weatherForecasrApiUrl = "https://api.openweathermap.org/data/2.5/forecast?q="
 
-// Time format
-moment().format("L")
-
 // Main function
 function searchForCity(cityname) {
     getCurrentCityWeather(cityname)
     getFiveDayForecast(cityname)
 }
 renderPage();
+
+// Time format
+moment().format("L")
 
 // Rendering page when page refreshes
 function renderPage() {
